@@ -1,0 +1,5 @@
+Criar a imagem de disco vazia (1.44 MB):
+dd if=/dev/zero of=disk.img bs=512 count=2880
+
+Gravar o bootloader no primeiro setor:
+dd if=boot.bin of=disk.img bs=512 count=1 conv=notrunc

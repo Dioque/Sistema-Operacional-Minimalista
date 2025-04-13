@@ -56,3 +56,17 @@ cat bin/stage1.bin bin/stage2.bin bin/kernel.bin > img/boot.img
 mkisofs -o SOS/zyrusOS.iso -b boot.img -no-emul-boot -boot-load-size 4 -boot-info-table img/
 ```
 
+## Copia e Colar
+```bash
+nasm -f bin boot/stage1.asm -o bin/stage1.bin
+nasm -f bin boot/stage2.asm -o bin/stage2.bin
+cd kernel
+cargo build --release --target x86_64-unknown-none
+cargo install cargo-binutils
+rustup component add llvm-tools-preview
+rust-objcopy --binary-architecture=i386:x86-64 -O binary target/x86_64-unknown-none/release/kernel ../bin/kernel.bin
+cd ..
+cat bin/stage1.bin bin/stage2.bin bin/kernel.bin > img/boot.img
+mkisofs -o SOS/zyrusOS.iso -b boot.img -no-emul-boot -boot-load-size 4 -boot-info-table img/
+.
+```

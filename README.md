@@ -31,7 +31,7 @@ nasm -f bin boot/stage1.asm -o bin/stage1.bin
 nasm -f bin boot/stage2.asm -o bin/stage2.bin
 ```
 
-### 3. Compile o Kernel (64 bits em Rust) e convertelo para .bin
+### 3. Compile o Kernel (64 bits em Rust) e converta-o para .bin
 
 ```bash
 cd kernel

@@ -13,7 +13,7 @@
 
 
 <p align="center">
-  <img src="./.github/EstruturaProjeto.png">
+  <img src="./.github/ZyrusOS.png">
 </p>
 
 

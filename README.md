@@ -66,7 +66,10 @@ cargo install cargo-binutils
 rustup component add llvm-tools-preview
 rust-objcopy --binary-architecture=i386:x86-64 -O binary target/x86_64-unknown-none/release/kernel ../bin/kernel.bin
 cd ..
-cat bin/stage1.bin bin/stage2.bin bin/kernel.bin > img/boot.img
-mkisofs -o SOS/zyrusOS.iso -b boot.img -no-emul-boot -boot-load-size 4 -boot-info-table img/
-.
+dd if=/dev/zero of=img/os-image.img bs=512 count=2880
+dd if=bin/stage1.bin of=img/os-image.img conv=notrunc bs=512 seek=0
+dd if=bin/stage2.bin of=img/os-image.img conv=notrunc bs=512 seek=1
+dd if=bin/kernel.bin of=img/os-image.img conv=notrunc bs=512 seek=6
+mkisofs -o SOS/zyrusOS.iso -b os-image.img -no-emul-boot -boot-load-size 4 -boot-info-table img/
+qemu-system-x86_64 -cdrom SOS/zyrusos.iso
 ```

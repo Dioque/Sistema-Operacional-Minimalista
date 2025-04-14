@@ -1,14 +1,21 @@
 ENTRY(_start)
 
 SECTIONS {
-    . = 0x8000;
+    . = 1M;
 
     .text : {
-        *(.text .text.*)
+        *(.text*)
     }
 
-    /DISCARD/ : {
-        *(.eh_frame)
-        *(.note .note.*)
+    .rodata : {
+        *(.rodata*)
+    }
+
+    .data : {
+        *(.data*)
+    }
+
+    .bss : {
+        *(.bss*)
     }
 }

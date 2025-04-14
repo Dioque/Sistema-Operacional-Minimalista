@@ -1,27 +1,31 @@
 [BITS 16]
 [ORG 0x8000]
 
+
+; Constantes
 CODE_SEG equ 0x08
 DATA_SEG equ 0x10
 boot_drive equ 0x7DFD
 
-
 start:
 
+    ; Debug - mostra 'S' se carregado corretamente
     mov ah, 0x0E
     mov al, 'S'
-    int 0x10 
-
+    int 0x10  ; Deve mostrar 'S' na tela se carregado corretamente
+    
     ; Configura segmentos
     xor ax, ax
     mov ds, ax
     mov es, ax
     
-    ; Carrega kernel (20 setores)
+    
+    
+    ; Carrega kernel (20 setores) - DEVE SER FEITO ANTES do modo protegido!
     mov ah, 0x02
     mov al, 20
     mov ch, 0
-    mov cl, 3       ; Setor após o stage2
+    mov cl, 6       ; Setor após o stage2
     mov dh, 0
     mov dl, [0x7C00 + boot_drive]
     mov bx, 0x1000  ; Carrega kernel em 0x1000
@@ -41,19 +45,15 @@ start:
     
     jmp CODE_SEG:init32
 
-
 [BITS 32]
+[extern _start]
 init32:
     mov ax, DATA_SEG
     mov ds, ax
     mov es, ax
     mov ss, ax
     mov esp, 0x90000
-    
-    mov ah, 0x0E
-    mov al, 'S'
-    int 0x10 
-
+    ; call _start
     jmp 0x1000      ; Pula para o kernel
 
 enable_A20:
@@ -88,3 +88,6 @@ gdt_descriptor:
     dd gdt_start
 
 error_msg db "Disk error!", 0
+
+times 510 - ($-$$) db 0
+dw 0xAA55
